@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuração de Exportação - DocZ</title>
+    <style>
+        /* ===== RESET E BASE ===== */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: #fafafa;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #595959;
+            font-size: 12px;
+        }
+
+        /* ===== MODAL ===== */
+        #popup-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .ui-dialog {
+            background: #585858;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            width: 550px;
+            max-width: 95%;
+        }
+
+        /* ===== TITLEBAR ===== */
+        .ui-dialog-titlebar {
+            background: url("https://docz.sosdocs.com.br/Docz/app/images/backgrounds/titleBg.png") repeat-x 0 0;
+            border-bottom: 1px solid #cdcdcd;
+            height: 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .ui-dialog-title {
+            font-weight: bold;
+            color: #595959;
+            font-size: 12px;
+        }
+
+        .close-x {
+            text-decoration: none;
+            color: #595959;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .close-x:hover {
+            color: #000;
+        }
+
+        /* ===== CONTEÚDO INTERNO ===== */
+        .ui-dialog-content {
+            background-color: #fafafa;
+            padding: 15px;
+            border-radius: 0 0 3px 3px;
+        }
+
+        /* ===== WIDGET E FORMULÁRIOS ===== */
+        .widget {
+            background: #f9f9f9;
+            border: 1px solid #cdcdcd;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+
+        .widget .title {
+            height: 36px;
+            background: url("https://docz.sosdocs.com.br/Docz/app/images/backgrounds/titleBg.png") repeat-x;
+            border-bottom: 1px solid #cdcdcd;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .widget .title h6 {
+            font-weight: bold;
+            margin: 0;
+            font-size: 12px;
+            color: #333;
+        }
+
+        fieldset {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px;
+            background: #fff;
+        }
+
+        legend {
+            font-weight: bold;
+            color: #595959;
+            padding: 0 5px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        .radio-label input {
+            margin-right: 8px;
+        }
+
+        .sub-fields {
+            margin-left: 24px;
+            padding-left: 10px;
+            border-left: 2px dashed #ddd;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .field-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .field-row label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .required::after {
+            content: " *";
+            color: #9f352b;
+        }
+
+        input[type="text"], select {
+            border: 1px solid #bdbdbd;
+            background: #fff;
+            font-size: 12px;
+            padding: 5px;
+            font-family: Arial, sans-serif;
+            color: #595959;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 1px;
+        }
+
+        input[type="text"]:disabled, select:disabled {
+            background: #f0f0f0;
+            color: #aaa;
+            cursor: not-allowed;
+            border-color: #dadada;
+        }
+
+        /* ===== RODAPÉ E BOTÕES ===== */
+        .button-wrapper {
+            text-align: right;
+            border-top: 1px double #ccc;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .button {
+            font-size: 11px;
+            font-weight: bold;
+            background-image: url("https://docz.sosdocs.com.br/Docz/app/images/ui/usualButtons.png");
+            background-repeat: repeat-x;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 8px 25px;
+            border-radius: 2px;
+            color: #fff;
+            display: inline-block;
+            border: none;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-left: 8px;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .button:active {
+            opacity: 0.8;
+        }
+
+        .greenB { background-position: 0 -425px; border: 1px solid #7ca82a; }
+        .redB { background-position: 0 -170px; border: 1px solid #9f352b; }
+        .dblueB { background-position: 0 -680px; border: 1px solid #2e6691; }
+        .greyB { background-position: 0 0; border: 1px solid #999; color: #555; }
+    </style>
+</head>
+<body>
+
+<div id="popup-backdrop">
+    <div id="modal-exportacao" class="ui-dialog">
+        <div class="ui-dialog-titlebar">
+            <span class="ui-dialog-title">Configurações de Exportação do Sistema</span>
+            <a href="javascript:void(0)" onclick="fecharPopup()" class="close-x">✖</a>
+        </div>
+
+        <div class="ui-dialog-content">
+            <div class="widget">
+                <div class="title">
+                    <h6>Parâmetros para Geração de Arquivo</h6>
+                </div>
+
+                <fieldset>
+                    <legend>Método de Extração</legend>
+                    
+                    <div class="form-group">
+                        <label class="radio-label">
+                            <input type="radio" name="tipoExportacao" value="completa" checked onclick="alternarMetodo('completa')">
+                            Exportação Completa
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="radio-label">
+                            <input type="radio" name="tipoExportacao" value="hierarquica" onclick="alternarMetodo('hierarquica')">
+                            Exportação Hierárquica
+                        </label>
+                        
+                        <div class="sub-fields">
+                            <div class="field-row">
+                                <label for="classificacaoInicial" class="required">Classificação Inicial</label>
+                                <select id="classificacaoInicial" disabled>
+                                    <option value="">-- Selecione a classificação --</option>
+                                    <option value="100">100 - VALOR 1</option>
+                                    <option value="110">110 - VALOR 2</option>
+                                    <option value="120">120 - VALOR 3</option>
+                                    <option value="200">200 - VALOR 4</option>
+                                    <option value="300">300 - VALOR 5</option>
+                                </select>
+                            </div>
+                            
+                            <div class="field-row">
+                                <label for="classificacaoFinal">Classificação Final (Opcional)</label>
+                                <select id="classificacaoFinal" disabled>
+                                    <option value="">-- Selecione a classificação --</option>
+                                    <option value="100">100 - VALOR 1</option>
+                                    <option value="110">110 - VALOR 2</option>
+                                    <option value="120">120 - VALOR 3</option>
+                                    <option value="200">200 - VALOR 4</option>
+                                    <option value="300">300 - VALOR 5</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="button-wrapper">
+                <button class="button greyB" onclick="fecharPopup()">Fechar</button>
+                <button class="button greenB" onclick="processarExportacao()">Exportar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function alternarMetodo(metodo) {
+        const cmbInicial = document.getElementById("classificacaoInicial");
+        const cmbFinal = document.getElementById("classificacaoFinal");
+
+        if (metodo === 'completa') {
+            cmbInicial.disabled = true;
+            cmbFinal.disabled = true;
+            cmbInicial.value = "";
+            cmbFinal.value = "";
+        } else {
+            cmbInicial.disabled = false;
+            cmbFinal.disabled = false;
+        }
+    }
+
+    function processarExportacao() {
+        const rdoHierarquica = document.querySelector('input[name="tipoExportacao"][value="hierarquica"]').checked;
+        const cmbInicial = document.getElementById("classificacaoInicial").value;
+
+        if (rdoHierarquica && !cmbInicial) {
+            alert("Atenção: O campo 'Classificação Inicial' é de preenchimento obrigatório para a extração hierárquica.");
+            return;
+        }
+
+        alert("Sucesso: Solicitação enviada ao lote de processamento do DocZ!");
+        fecharPopup();
+    }
+
+    function fecharPopup() {
+        document.getElementById("popup-backdrop").style.display = "none";
+        console.log("Modal DocZ fechada.");
+    }
+</script>
+
+</body>
+</html>
